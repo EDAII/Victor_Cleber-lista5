@@ -1,5 +1,5 @@
 # Victor_Cleber-lista5
-Inverval scheduling
+Interval scheduling
 
 |Nome|Matrícula|
 |---|---|
