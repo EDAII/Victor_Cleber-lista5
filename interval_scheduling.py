@@ -1,3 +1,4 @@
+import os
 
 class Interval:
 
@@ -37,23 +38,50 @@ def insertion_sort(nums):
     return nums
 
     
-def interval_scheduling(V):
-    #V = insertion_sort(V)
-    V = count_sort(V, 10)
+def interval_scheduling(V, max):
+    V = count_sort(V, max)
     A = []
     finish = 0
     for i in V:
         if finish <= i.start:
-            print(i.start, i.finish)
             finish = i.finish
             A.append(i)
     return A
 
 if __name__ == '__main__':
+    max = 7
     I = []
     I.append(Interval("Summer School" , 1, 5))
     I.append(Interval("Semester 1" , 1, 3))
     I.append(Interval("Semester 2" , 4, 6))
     print(I)
-    O = interval_scheduling(I)
-    print(O)
+    I = interval_scheduling(I, 7)
+    print(I)
+
+    while(1):
+        print('=========================================')
+        print("Choose an option:\n1: Input a task\n2: Interval scheduling\n3: Print\n0: exit")
+        ans = int(input())
+        if ans == 1:
+            print('Choose a name: ')
+            name = input()
+            print('Choose a start')
+            start = int(input())
+            print('Choose a finish')
+            finish = int(input())
+            if finish > max:
+                max = finish + 1
+            I.append(Interval(name, start, finish))
+
+        if ans == 2:
+            I = interval_scheduling(I, max)
+
+        if ans == 3:
+            print(I)
+
+        if ans == 0:
+            break
+            
+        print('=========================================')
+        ans = input()
+        os.system('cls' if os.name == 'nt' else 'clear')
