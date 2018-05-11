@@ -10,6 +10,22 @@ class Interval:
         return str((self.title, self.start, self.finish))
 
 
+def count_sort(nums, max_value):
+    output = [0 for i in range(len(nums))]
+    count = [0 for i in range(max_value+1)]
+
+    for i in nums:
+        count[i.finish] += 1
+
+    for i in range(max_value+1):
+        count[i] += count[i-1]
+
+    for i in range(len(nums)-1, -1, -1):
+        output[count[nums[i].finish]-1] = nums[i]
+        count[nums[i].finish] -= 1
+
+    return output
+
 def insertion_sort(nums):
     for i in range(1, len(nums)):
         aux = nums[i]
@@ -22,7 +38,8 @@ def insertion_sort(nums):
 
     
 def interval_scheduling(V):
-    V = insertion_sort(V)
+    #V = insertion_sort(V)
+    V = count_sort(V, 10)
     A = []
     finish = 0
     for i in V:
