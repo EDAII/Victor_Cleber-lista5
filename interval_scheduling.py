@@ -49,14 +49,8 @@ def interval_scheduling(V, max):
     return A
 
 if __name__ == '__main__':
-    max = 7
+    max = 0
     I = []
-    I.append(Interval("Summer School" , 1, 5))
-    I.append(Interval("Semester 1" , 1, 3))
-    I.append(Interval("Semester 2" , 4, 6))
-    print(I)
-    I = interval_scheduling(I, 7)
-    print(I)
 
     while(1):
         print('=========================================')
@@ -69,7 +63,7 @@ if __name__ == '__main__':
             start = int(input())
             print('Choose a finish')
             finish = int(input())
-            if finish > max:
+            if finish >= max:
                 max = finish + 1
             I.append(Interval(name, start, finish))
 
@@ -81,7 +75,7 @@ if __name__ == '__main__':
 
         if ans == 0:
             break
-            
+
         print('=========================================')
         ans = input()
         os.system('cls' if os.name == 'nt' else 'clear')
