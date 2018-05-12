@@ -1,18 +1,27 @@
 import time
 import threading
-
 from random import randint
+
 from kivy.app import App
 from kivy.properties import ObjectProperty
 from kivy.uix.listview import ListItemButton
 from interval_scheduling import Interval, interval_scheduling
 from kivy.uix.button import Button
 from kivy.uix.widget import Widget
-from kivy.graphics import Rectangle
 from kivy.core.window import Window
 from kivy.uix.boxlayout import BoxLayout
 from kivy.animation import Animation
-from kivy.graphics import Color
+
+
+class ListButtons:
+
+    def __init__(self, button, pos_x, size_x):
+        self.button = button
+        self.pos_x = pos_x
+        self.size_x = size_x
+
+    def __repr__(self):
+        return str((self.button, self.pos_x, self.size_x))
 
 
 class TaskListButton(ListItemButton):
@@ -29,7 +38,9 @@ class EDADisplay(BoxLayout):
         super(EDADisplay, self).__init__(**kwargs)
         self.list_I = []
         self.max = 0
-        self.myWidget = Widget(size=(0, 0), pos=(0, 0))
+        self.myWidget = Widget()
+        self.list_buttons = []
+        self.button = Button()
 
     def add_task(self):
         task_full = (str(self.task_name_text_input.text) + " - " + str(self.task_start_text_input.text) + " - "
@@ -50,35 +61,36 @@ class EDADisplay(BoxLayout):
 
     def show_interval_more(self):
         self.remove_widget(self.myWidget)
+        self.myWidget = Widget()
+        self.size = Window.size
+
         self.list_I = interval_scheduling(self.list_I, self.max)
-        with self.myWidget.canvas:
-            aux_1 = 0
-            for aux in self.list_I:
-                Color(float(randint(0,9))/10, float(randint(0,9))/10, float(randint(0,9))/10, 1)
-                Rectangle(pos=(aux_1, 0), size=(aux.finish-aux.start, 100))
-                aux_1 = aux.finish-aux.start
 
-                # self.button = Button(background_color=[float(randint(0,9))/10, float(randint(0,9))/10, float(randint(0,9))/10, 1],
-                #                      pos=(aux_1, 0), size=(aux.finish - aux.start, 100), text=aux.title)
-                # self.add_widget(self.button)
-                # self.list_buttons.append(self.button)
+        aux_1 = 0
+        for aux in self.list_I:
+            self.button = Button(text=aux.title, pos=(aux_1, 0), size=((aux.finish - aux.start)*self.size[0]/24, 100),
+                                 background_color=[0, 0, 0, 0], font_size=1)
 
+            self.myWidget.add_widget(self.button)
+            self.list_buttons.append(ListButtons(self.button, aux_1, (aux.finish - aux.start)*self.size[0]/24))
+            aux_1 = aux_1 + (aux.finish - aux.start)*self.size[0]/24
+
+        print(self.list_buttons)
         self.add_widget(self.myWidget)
+        self. animetionstart()
 
-    def animate(self, instance):
-        # create an animation object. This object could be stored
-        # and reused each call or reused across different widgets.
-        # += is a sequential step, while &= is in parallel
-        animation = Animation(pos=(100, 100), t='out_bounce')
-        animation += Animation(pos=(200, 100), t='out_bounce')
-        animation &= Animation(size=(500, 500))
-        animation += Animation(size=(100, 50))
+    def animetionstart(self):
+        t = threading.Thread(target=self.animation)  # initiate the thread
+        t.daemon = True  # daemon thread so it terminates when stopping the main thread
+        t.start()
 
-        # apply the animation on the button, passed in the "instance" argument
-        # Notice that default 'click' animation (changing the button
-        # color while the mouse is down) is unchanged.
-        animation.start(instance)
-
+    def animation(self):
+        anim = Animation(font_size=12)
+        anim &= Animation(background_color=[float(randint(0, 9))/10, float(randint(0, 9))/10,
+                                            float(randint(0, 9))/10, 1], duration=0.1)
+        for these_labels in self.list_buttons:
+            anim.start(these_labels.button)
+            time.sleep(1.5)
 
 
 class EDADisplayApp(App):
