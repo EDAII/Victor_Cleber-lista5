@@ -67,17 +67,20 @@ class EDADisplay(BoxLayout):
         self.list_I = interval_scheduling(self.list_I, self.max)
 
         aux_1 = 0
+        aux_2 = 0
         for aux in self.list_I:
-            self.button = Button(text=aux.title, pos=(aux_1, 0), size=((aux.finish - aux.start)*self.size[0]/24, 100),
-                                 background_color=[0, 0, 0, 0], font_size=1)
+            self.button = Button(text=aux.title, pos=(aux_2, 200), size=(100, 100), font_size=12,
+                                 background_color=[float(randint(0, 9)) / 10, float(randint(0, 9)) / 10,
+                                                   float(randint(0, 9)) / 10, 1])
 
             self.myWidget.add_widget(self.button)
             self.list_buttons.append(ListButtons(self.button, aux_1, (aux.finish - aux.start)*self.size[0]/24))
             aux_1 = aux_1 + (aux.finish - aux.start)*self.size[0]/24
+            aux_2 = aux_2 + 100
 
         print(self.list_buttons)
         self.add_widget(self.myWidget)
-        self. animetionstart()
+        self.animetionstart()
 
     def animetionstart(self):
         t = threading.Thread(target=self.animation)  # initiate the thread
@@ -85,10 +88,8 @@ class EDADisplay(BoxLayout):
         t.start()
 
     def animation(self):
-        anim = Animation(font_size=12)
-        anim &= Animation(background_color=[float(randint(0, 9))/10, float(randint(0, 9))/10,
-                                            float(randint(0, 9))/10, 1], duration=0.1)
         for these_labels in self.list_buttons:
+            anim = Animation(x=these_labels.pos_x, y=0, size=(these_labels.size_x, 100), t='in_quad')
             anim.start(these_labels.button)
             time.sleep(1.5)
 
