@@ -42,6 +42,9 @@ class EDADisplay(BoxLayout):
                                     int(self.task_end_text_input.text)))
 
     def show_interval_more(self):
+        self.remove_widget(self.myWidget)
+        self.myWidget = Widget(size=(100, 100))
+
         self.list_I = interval_scheduling(self.list_I, self.max)
         self.size = Window.size
         self.add_widget(self.myWidget)
@@ -52,6 +55,8 @@ class EDADisplay(BoxLayout):
                 Color(float(randint(0,9))/10, float(randint(0,9))/10, float(randint(0,9))/10, 1)
                 Rectangle(pos=(aux_1, 0), size=(aux.finish-aux.start, 100))
                 aux_1 = aux.finish-aux.start
+
+
 
     def show_interval_less(self, *args):
         pass
