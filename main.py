@@ -103,43 +103,46 @@ class EDADisplayLess(Screen):
 
     def __init__(self, **kwargs):
         super(EDADisplayLess, self).__init__(**kwargs)
-        self.list_I = []
-        self.max = 0
         self.myWidget = Widget()
         self.list_buttons = []
         self.button = Button()
+        self.temp_max = 0
+        self.max_value = 0
+        self.list_events = []
 
     def add_task(self):
-        task_full = (str(self.task_name_text_input.text) + " - " + str(self.task_duration_text_input.text) + " - "
-                     + str(self.task_deadline_text_input_text_input.text))
+        self.temp_max = int(self.task_deadline_text_input.text)
+        self.list_events.append(Event(self.task_name_text_input.text, 0, int(self.task_duration_text_input.text),
+                                      int(self.task_deadline_text_input.text)))
 
-        if int(self.task_end_text_input.text) >= self.max:
-            self.max = int(self.task_end_text_input.text) + 1
+        if self.temp_max >= self.max_value:
+            self.max_value = self.temp_max
+
+        task_full = (str(self.task_name_text_input.text) + " - " + str(self.task_duration_text_input.text) + " - "
+                     + str(self.task_deadline_text_input.text))
 
         self.task_list.adapter.data.extend([task_full])
 
         self.task_list._trigger_reset_populate()
 
-        self.list_I.append(Event(self.task_name_text_input.text, self.task_duration_text_input.text,
-                                 self.task_deadline_text_input.text))
 
-    def show_interval_more(self):
+    def show_interval_less(self):
         self.remove_widget(self.myWidget)
         self.myWidget = Widget()
         self.size = Window.size
 
-        self.list_I = minimize_lateness(self.list_I, self.max)
+        self.list_events = minimize_lateness(self.list_events, self.max_value)
 
         aux_1 = 0
         aux_2 = 0
-        for aux in self.list_I:
+        for aux in self.list_events:
             self.button = Button(text=aux.title, pos=(aux_2, 200), size=(100, 100), font_size=12,
                                  background_color=[float(randint(0, 9)) / 10, float(randint(0, 9)) / 10,
                                                    float(randint(0, 9)) / 10, 1])
 
             self.myWidget.add_widget(self.button)
-            self.list_buttons.append(ListButtons(self.button, aux_1, (aux.finish - aux.start)*self.size[0]/24))
-            aux_1 = aux_1 + (aux.finish - aux.start)*self.size[0]/24
+            self.list_buttons.append(ListButtons(self.button, aux_1, (aux.finish - aux.start) * self.size[0] / 24))
+            aux_1 = aux_1 + (aux.finish - aux.start) * self.size[0] / 24
             aux_2 = aux_2 + 100
 
         print(self.list_buttons)
