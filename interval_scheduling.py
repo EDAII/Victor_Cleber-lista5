@@ -6,7 +6,7 @@ class Interval:
         self.title = title
         self.start = start
         self.finish = finish
-    
+
     def __repr__(self):
         return str((self.title, self.start, self.finish))
 
@@ -27,17 +27,7 @@ def count_sort(nums, max_value):
 
     return output
 
-def insertion_sort(nums):
-    for i in range(1, len(nums)):
-        aux = nums[i]
-        j = i-1
-        while j>=0 and aux.finish < nums[j].finish:
-            nums[j+1] = nums[j]
-            j=j-1
-        nums[j+1] = aux
-    return nums
 
-    
 def interval_scheduling(V, max):
     V = count_sort(V, max)
     A = []
