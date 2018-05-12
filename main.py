@@ -2,19 +2,23 @@ import time
 import threading
 from random import randint
 
+from interval_scheduling import Interval, interval_scheduling
+from scheduling_to_minimize_maximum_lateness import Event, minimize_lateness
+
 from kivy.app import App
 from kivy.properties import ObjectProperty
 from kivy.uix.listview import ListItemButton
-from interval_scheduling import Interval, interval_scheduling
 from kivy.uix.button import Button
 from kivy.uix.widget import Widget
 from kivy.core.window import Window
-from kivy.uix.boxlayout import BoxLayout
 from kivy.animation import Animation
+from kivy.uix.screenmanager import ScreenManager, Screen
+from kivy.lang import Builder
+
+buildKV = Builder.load_file("edadisplay.kv")
 
 
 class ListButtons:
-
     def __init__(self, button, pos_x, size_x):
         self.button = button
         self.pos_x = pos_x
@@ -28,14 +32,14 @@ class TaskListButton(ListItemButton):
     pass
 
 
-class EDADisplay(BoxLayout):
+class EDADisplayMore(Screen):
     task_name_text_input = ObjectProperty()
     task_start_text_input = ObjectProperty()
     task_end_text_input = ObjectProperty()
     task_list = ObjectProperty()
 
     def __init__(self, **kwargs):
-        super(EDADisplay, self).__init__(**kwargs)
+        super(EDADisplayMore, self).__init__(**kwargs)
         self.list_I = []
         self.max = 0
         self.myWidget = Widget()
@@ -55,9 +59,6 @@ class EDADisplay(BoxLayout):
 
         self.list_I.append(Interval(self.task_name_text_input.text, int(self.task_start_text_input.text),
                                     int(self.task_end_text_input.text)))
-
-    def show_interval_less(self, *args):
-        pass
 
     def show_interval_more(self):
         self.remove_widget(self.myWidget)
@@ -94,10 +95,17 @@ class EDADisplay(BoxLayout):
             time.sleep(1.5)
 
 
+# The ScreenManager controls moving between screens
+screen_manager = ScreenManager()
+
+# Add the screens to the manager and then supply a name
+# that is used to switch screens
+screen_manager.add_widget(EDADisplayMore(name="edadisplaymore"))
+screen_manager.add_widget(EDADisplayLess(name="edadisplayless"))
+
 class EDADisplayApp(App):
     def build(self):
-        return EDADisplay()
-
+        return screen_manager
 
 EDAApp = EDADisplayApp()
 EDAApp.run()
