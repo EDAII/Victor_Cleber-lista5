@@ -3,9 +3,7 @@
 #: import ListAdapter kivy.adapters.listadapter.ListAdapter
 #: import ListItemButton kivy.uix.listview.ListItemButton
 
-EDADisplay:
-
-<EDADisplay>:
+<EDADisplayMore>:
     orientation: "vertical"
     task_name_text_input: task_name
     task_start_text_input: task_start
@@ -15,6 +13,28 @@ EDADisplay:
     spacing: 10
 
     BoxLayout:
+        pos: 0, root.height - 50
+        size_hint_y: None
+        height: "40dp"
+        Button:
+            text: "More tasks"
+            on_press:
+                # You can define the duration of the change
+                # and the direction of the slide
+                root.manager.transition.direction = 'right'
+                root.manager.transition.duration = 1
+                root.manager.current = 'edadisplaymore'
+        Button:
+            text: "Minimize lateness"
+            on_press:
+                # You can define the duration of the change
+                # and the direction of the slide
+                root.manager.transition.direction = 'left'
+                root.manager.transition.duration = 1
+                root.manager.current = 'edadisplayless'
+
+    BoxLayout:
+        pos: 0, root.height - 100
         size_hint_y: None
         height: "40dp"
 
@@ -34,6 +54,7 @@ EDADisplay:
             id: task_end
 
     BoxLayout:
+        pos: 0, root.height - 150
         size_hint_y: None
         height: "40dp"
         Button:
@@ -45,12 +66,82 @@ EDADisplay:
             size_hint_x: 15
             on_press: root.show_interval_more()
 
-        Button:
-            text: "Show Interval by less time"
-            size_hint_x: 15
-            on_press: root.show_interval_less()
 
     ListView:
+        size_hint_y: .7
+        size_hint_x: 1
         id: task_list_view
         adapter:
             ListAdapter(data=["Task Name    -     Start    -     End"], cls=main.TaskListButton)
+
+
+<EDADisplayLess>:
+    orientation: "vertical"
+    task_name_text_input: task_name
+    task_duration_text_input: task_duration
+    task_deadline_text_input: task_deadline
+    task_list: task_list_view
+    padding: 10
+    spacing: 10
+
+    BoxLayout:
+        pos: 0, root.height - 50
+        size_hint_y: None
+        height: "40dp"
+        Button:
+            text: "More tasks"
+            on_press:
+                # You can define the duration of the change
+                # and the direction of the slide
+                root.manager.transition.direction = 'right'
+                root.manager.transition.duration = 1
+                root.manager.current = 'edadisplaymore'
+        Button:
+            text: "Minimize lateness"
+            on_press:
+                # You can define the duration of the change
+                # and the direction of the slide
+                root.manager.transition.direction = 'left'
+                root.manager.transition.duration = 1
+                root.manager.current = 'edadisplayless'
+
+    BoxLayout:
+        pos: 0, root.height - 100
+        size_hint_y: None
+        height: "40dp"
+
+        Label:
+            text: "Task Name"
+        TextInput:
+            id: task_name
+
+        Label:
+            text: "Task Duration"
+        TextInput:
+            id: task_duration
+
+        Label:
+            text: "Task deadline"
+        TextInput:
+            id: task_deadline
+
+    BoxLayout:
+        pos: 0, root.height - 150
+        size_hint_y: None
+        height: "40dp"
+        Button:
+            text: "Add Task"
+            size_hint_x: 15
+            on_press: root.add_task()
+        Button:
+            text: "Show Interval by less lateness"
+            size_hint_x: 15
+            on_press: root.show_interval_less()
+
+
+    ListView:
+        size_hint_y: .7
+        size_hint_x: 1
+        id: task_list_view
+        adapter:
+            ListAdapter(data=["Task Name    -     Duration    -     Deadline"], cls=main.TaskListButton)
