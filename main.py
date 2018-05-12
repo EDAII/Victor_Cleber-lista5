@@ -92,7 +92,7 @@ class EDADisplayMore(Screen):
         for these_labels in self.list_buttons:
             anim = Animation(x=these_labels.pos_x, y=0, size=(these_labels.size_x, 100), t='in_quad')
             anim.start(these_labels.button)
-            time.sleep(1.5)
+            time.sleep(0.5)
 
 
 class EDADisplayLess(Screen):
@@ -157,8 +157,7 @@ class EDADisplayLess(Screen):
         for these_labels in self.list_buttons:
             anim = Animation(x=these_labels.pos_x, y=0, size=(these_labels.size_x, 100), t='in_quad')
             anim.start(these_labels.button)
-            time.sleep(1.5)
-
+            time.sleep(0.5)
 
 screen_manager = ScreenManager()
 
