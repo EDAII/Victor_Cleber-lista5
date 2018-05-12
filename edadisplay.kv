@@ -1,0 +1,55 @@
+# Reference main.py
+#: import main main
+#: import ListAdapter kivy.adapters.listadapter.ListAdapter
+#: import ListItemButton kivy.uix.listview.ListItemButton
+
+EDADisplay:
+
+<EDADisplay>:
+    orientation: "vertical"
+    task_name_text_input: task_name
+    task_start_text_input: task_start
+    task_end_text_input: task_end
+    task_list: task_list_view
+    padding: 10
+    spacing: 10
+
+    BoxLayout:
+        size_hint_y: None
+        height: "40dp"
+
+        Label:
+            text: "Task Name"
+        TextInput:
+            id: task_name
+
+        Label:
+            text: "Task Start"
+        TextInput:
+            id: task_start
+
+        Label:
+            text: "Task End"
+        TextInput:
+            id: task_end
+
+    BoxLayout:
+        size_hint_y: None
+        height: "40dp"
+        Button:
+            text: "Add Task"
+            size_hint_x: 15
+            on_press: root.add_task()
+        Button:
+            text: "Show Interval by more tasks"
+            size_hint_x: 15
+            on_press: root.show_interval_more()
+        Button:
+            text: "Show Interval by less time"
+            size_hint_x: 15
+            on_press: root.show_interval_less()
+
+    ListView:
+        id: task_list_view
+        adapter:
+            ListAdapter(data=["Task Name    -     Start    -     End"], cls=main.TaskListButton)
