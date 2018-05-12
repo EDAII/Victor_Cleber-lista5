@@ -125,18 +125,17 @@ class EDADisplayLess(Screen):
 
         self.task_list._trigger_reset_populate()
 
-
     def show_interval_less(self):
         self.remove_widget(self.myWidget)
         self.myWidget = Widget()
         self.size = Window.size
 
-        self.list_events = minimize_lateness(self.list_events, self.max_value)
+        self.list_events = minimize_lateness(self.list_events, (self.max_value+1))
 
         aux_1 = 0
         aux_2 = 0
         for aux in self.list_events:
-            self.button = Button(text=aux.title, pos=(aux_2, 200), size=(100, 100), font_size=12,
+            self.button = Button(text=aux.event_title, pos=(aux_2, 200), size=(100, 100), font_size=12,
                                  background_color=[float(randint(0, 9)) / 10, float(randint(0, 9)) / 10,
                                                    float(randint(0, 9)) / 10, 1])
 
@@ -160,17 +159,17 @@ class EDADisplayLess(Screen):
             anim.start(these_labels.button)
             time.sleep(1.5)
 
-# The ScreenManager controls moving between screens
+
 screen_manager = ScreenManager()
 
-# Add the screens to the manager and then supply a name
-# that is used to switch screens
 screen_manager.add_widget(EDADisplayMore(name="edadisplaymore"))
 screen_manager.add_widget(EDADisplayLess(name="edadisplayless"))
+
 
 class EDADisplayApp(App):
     def build(self):
         return screen_manager
+
 
 EDAApp = EDADisplayApp()
 EDAApp.run()
